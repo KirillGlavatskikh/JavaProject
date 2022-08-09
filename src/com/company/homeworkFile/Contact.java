@@ -7,20 +7,20 @@ import java.util.Objects;
 public class Contact implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = -1137015459714456182L;
+    private static final long serialVersionUID = 5385324195010387799L;
 
     private String name;
     private String surname;
     private String nickname;
-    private String additionPhoneNumber;
+    private Long phoneNumber;
     private String email;
     private int yearBirth;
 
-    public Contact(String name, String surname, String nickname, String additionPhoneNumber, String email, int yearBirth) {
+    public Contact(String name, String surname, String nickname, Long PhoneNumber, String email, int yearBirth) {
         this.name = name;
         this.surname = surname;
         this.nickname = nickname;
-        this.additionPhoneNumber = additionPhoneNumber;
+        this.phoneNumber = PhoneNumber;
         this.email = email;
         this.yearBirth = yearBirth;
     }
@@ -29,17 +29,14 @@ public class Contact implements Serializable {
         return name;
     }
 
+    public Long getPhoneNumber() {
+        return phoneNumber;
+    }
+
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Contact{");
-        sb.append(", name='").append(name).append('\'');
-        sb.append(", surname='").append(surname).append('\'');
-        sb.append(", nickname='").append(nickname).append('\'');
-        sb.append(", additionPhoneNumber='").append(additionPhoneNumber).append('\'');
-        sb.append(", email='").append(email).append('\'');
-        sb.append(", yearBirth=").append(yearBirth);
-        sb.append('}');
-        return sb.toString();
+
+        return "Contact: " + name + " " + surname + " , " + nickname + " , " + phoneNumber + " , " + email + " , " + yearBirth;
     }
 
     @Override
@@ -47,11 +44,11 @@ public class Contact implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Contact contact = (Contact) o;
-        return yearBirth == contact.yearBirth && Objects.equals(name, contact.name) && Objects.equals(surname, contact.surname) && Objects.equals(nickname, contact.nickname) && Objects.equals(additionPhoneNumber, contact.additionPhoneNumber) && Objects.equals(email, contact.email);
+        return yearBirth == contact.yearBirth && Objects.equals(name, contact.name) && Objects.equals(surname, contact.surname) && Objects.equals(nickname, contact.nickname) && Objects.equals(phoneNumber, contact.phoneNumber) && Objects.equals(email, contact.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, surname, nickname, additionPhoneNumber, email, yearBirth);
+        return Objects.hash(name, surname, nickname, phoneNumber, email, yearBirth);
     }
 }

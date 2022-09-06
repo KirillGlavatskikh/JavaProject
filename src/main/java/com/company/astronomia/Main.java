@@ -25,7 +25,7 @@ public class Main {
         listBlackHoles.add(new BlackHoles("V Puppis", 960L, true));
         listBlackHoles.add(new BlackHoles("LB-1", 7400L, true));
 
-       menu(listAstronomicalObjects,listChangesAstronomicalObjects,listBlackHoles,listChangeBlackHoles);
+        menu(listAstronomicalObjects, listChangesAstronomicalObjects, listBlackHoles, listChangeBlackHoles);
     }
 
     public static void showInformationAllObject(List<AstronomicalObject> listAstronomicalObjects, List<BlackHoles> listBlackHoles) {
@@ -38,7 +38,8 @@ public class Main {
     }
 
     public static void showObjectByDistance(List<AstronomicalObject> listAstronomicalObjects, List<BlackHoles> listBlackHoles) {
-        try (Scanner scanner = new Scanner(System.in)) {
+        try {
+            Scanner scanner = new Scanner(System.in);
             System.out.println("Looking for a planet or a black hole?\nTo exit - enter exit");
             while (scanner.hasNext()) {
                 String choice = scanner.nextLine();
@@ -69,11 +70,14 @@ public class Main {
                 System.out.println("Enter again");
                 System.out.println("Looking for a planet or a black hole?\nTo exit - enter exit");
             }
+        } catch (ClassCastException e) {
+            e.printStackTrace();
         }
     }
 
     public static AstronomicalObject addNewAstronomicalObject() {
-        try (Scanner scanner = new Scanner(System.in)) {
+        try {
+            Scanner scanner = new Scanner(System.in);
             System.out.println("Enter name planet");
             String name = scanner.nextLine();
             System.out.println("Enter galaxy");
@@ -83,11 +87,15 @@ public class Main {
             System.out.println("Enter date of discovery");
             String date = scanner.nextLine();
             return new AstronomicalObject(name, galaxy, Long.parseLong(distance), Long.parseLong(date));
+        } catch (ClassCastException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 
     public static BlackHoles addNewBlackHole() {
-        try (Scanner scanner = new Scanner(System.in)) {
+        try {
+            Scanner scanner = new Scanner(System.in);
             System.out.println("Enter name black hole");
             String name = scanner.nextLine();
             System.out.println("Enter distance to earth");
@@ -95,12 +103,15 @@ public class Main {
             System.out.println("Black hole is a live?(true/false)");
             String isALive = scanner.nextLine();
             return new BlackHoles(name, Long.parseLong(distance), Boolean.parseBoolean(isALive));
+        } catch (ClassCastException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 
     public static void writeNewAstronomicalObjectToFile(List<AstronomicalObject> listAstronomicalObjects) {
-            listAstronomicalObjects.add(addNewAstronomicalObject());
-            bufferAstronomicalObjects((ArrayList<AstronomicalObject>) listAstronomicalObjects);
+        listAstronomicalObjects.add(addNewAstronomicalObject());
+        bufferAstronomicalObjects((ArrayList<AstronomicalObject>) listAstronomicalObjects);
     }
 
     public static void writeNewBlackHole(ArrayList<BlackHoles> listBlackHoles) {
@@ -108,33 +119,23 @@ public class Main {
         bufferBlackHoles(listBlackHoles);
     }
 
-    public static void readFileAstronomicalObjects(ArrayList<AstronomicalObject> listAstronomicalObjects) {
-        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(pathJournalAstronomicalObject))){
-            bufferAstronomicalObjects(listAstronomicalObjects);
-            System.out.println(ois.readObject());
-        } catch (IOException | ClassNotFoundException e) {
+    public static void bufferAstronomicalObjects(ArrayList<AstronomicalObject> listAstronomicalObjects) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(pathJournalAstronomicalObject))) {
+            List<AstronomicalObject> listBufferAstronomicalObjects = new ArrayList<>(listAstronomicalObjects);
+            oos.writeObject(listBufferAstronomicalObjects);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void bufferAstronomicalObjects(ArrayList<AstronomicalObject> listAstronomicalObjects) {
-      List<AstronomicalObject> listBufferAstronomicalObjects = new ArrayList<>();
-      try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(pathJournalAstronomicalObject))) {
-          listBufferAstronomicalObjects = (List<AstronomicalObject>) listAstronomicalObjects.clone();
-          oos.writeObject(listBufferAstronomicalObjects);
-      } catch (IOException e) {
-          e.printStackTrace();
-      }
-    }
-
-    public static void writeChangeAstronomicalObject(ArrayList<AstronomicalObject> listAstronomicalObjects, List<AstronomicalObject> listChangesAstronomicalObjects){
-        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(pathJournalChangeAstronomicalObject));
-        Scanner scanner = new Scanner(System.in)){
+    public static void writeChangeAstronomicalObject(ArrayList<AstronomicalObject> listAstronomicalObjects, List<AstronomicalObject> listChangesAstronomicalObjects) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(pathJournalChangeAstronomicalObject))) {
+            Scanner scanner = new Scanner(System.in);
             Date date = new Date();
             System.out.println("Enter name planet\nTo exit - enter exit");
             while (scanner.hasNext()) {
                 String name = scanner.nextLine();
-                if(name.equals("exit")){
+                if (name.equals("exit")) {
                     System.out.println("Exit!");
                     break;
                 }
@@ -159,31 +160,24 @@ public class Main {
             e.printStackTrace();
         }
     }
-    public static void bufferBlackHoles (ArrayList<BlackHoles> listBlackHoles) {
-        List<BlackHoles> listBufferBlackHoles = new ArrayList<>();
-        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(pathJournalBlackHole))){
-            listBufferBlackHoles = (List<BlackHoles>) listBlackHoles.clone();
+
+    public static void bufferBlackHoles(ArrayList<BlackHoles> listBlackHoles) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(pathJournalBlackHole))) {
+            List<BlackHoles> listBufferBlackHoles = new ArrayList<>(listBlackHoles);
             oos.writeObject(listBufferBlackHoles);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public static void readFileBlackHoles (ArrayList<BlackHoles> listBlackHoles){
-        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(pathJournalBlackHole))){
-            bufferBlackHoles(listBlackHoles);
-            System.out.println(ois.readObject());
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-    public static void writeChangeBlackHoles (ArrayList<BlackHoles> listBlackHoles, List<BlackHoles> listChangeBlackHoles){
-        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(pathJournalChangeBlackHoles));
-        Scanner scanner = new Scanner(System.in)){
+
+    public static void writeChangeBlackHoles(ArrayList<BlackHoles> listBlackHoles, List<BlackHoles> listChangeBlackHoles) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(pathJournalChangeBlackHoles))) {
+            Scanner scanner = new Scanner(System.in);
             Date date = new Date();
             System.out.println("Enter name black hole");
             String name = scanner.nextLine();
             for (BlackHoles listBlackHole : listBlackHoles) {
-                if(listBlackHole.getName().equals(name)){
+                if (listBlackHole.getName().equals(name)) {
                     String change = "Change";
                     System.out.println("Enter new distance to Earth");
                     String newDistance = scanner.nextLine();
@@ -192,9 +186,9 @@ public class Main {
                     long distance = listBlackHole.getDistanceToEarth();
                     listBlackHole.setDistanceToEarth(Long.parseLong(newDistance));
                     listBlackHole.setALive(Boolean.parseBoolean(isALive));
-                    listChangeBlackHoles.add(new BlackHoles(listBlackHole.getName(), date, change,Long.parseLong(newDistance),Boolean.parseBoolean(isALive)));
+                    listChangeBlackHoles.add(new BlackHoles(listBlackHole.getName(), date, change, Long.parseLong(newDistance), Boolean.parseBoolean(isALive)));
                     oos.writeObject(listChangeBlackHoles);
-                    if(Long.parseLong(newDistance) < distance / 2){
+                    if (Long.parseLong(newDistance) < distance / 2) {
                         System.out.println("!!! ATTENTION !!!\n!!! FAST APPROACH TO EARTH !!!");
                     }
                 }
@@ -203,7 +197,8 @@ public class Main {
             e.printStackTrace();
         }
     }
-    public static void getStatisticsAstronomicalObjects(){
+
+    public static void getStatisticsAstronomicalObjects() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(pathJournalChangeAstronomicalObject))) {
             System.out.println(ois.readObject());
         } catch (IOException | ClassNotFoundException e) {
@@ -211,8 +206,8 @@ public class Main {
         }
     }
 
-    public static void getStatisticsBlackHoles(){
-        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(pathJournalChangeBlackHoles))){
+    public static void getStatisticsBlackHoles() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(pathJournalChangeBlackHoles))) {
             System.out.println(ois.readObject());
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -220,22 +215,25 @@ public class Main {
     }
 
     public static void deleteAstronomicalObject(ArrayList<AstronomicalObject> listAstronomicalObjects) {
-        try (Scanner scanner = new Scanner(System.in)) {
+        try {
+            Scanner scanner = new Scanner(System.in);
             System.out.println("Enter name astronomical object\nTo exit - enter exit");
-            while (scanner.hasNext()){
+            while (scanner.hasNext()) {
                 String name = scanner.nextLine();
-                if(name.equals("exit")){
+                if (name.equals("exit")) {
                     System.out.println("Exit!");
                     break;
                 }
-                listAstronomicalObjects.remove(name);
-                bufferAstronomicalObjects(listAstronomicalObjects);
-                System.out.println("Object deleted!\nEnter next or exit");
+                listAstronomicalObjects.removeIf(listAstronomicalObject -> listAstronomicalObject.getName().equals(name));
+                listAstronomicalObjects.trimToSize();
+                System.out.println("Object delete!");
             }
+        } catch (ClassCastException e) {
+            e.printStackTrace();
         }
     }
 
-    public static void printDialog(){
+    public static void printDialog() {
         System.out.println("""
                 Select item:
                 1. Show information all objects.
@@ -254,32 +252,33 @@ public class Main {
                             ArrayList<BlackHoles> listBlackHoles, List<BlackHoles> listChangeBlackHoles) {
         try (Scanner scanner = new Scanner(System.in)) {
             printDialog();
-            outer:
-            while (scanner.hasNext()){
+            boolean methodEntry = true;
+            while (methodEntry) {
                 String number = scanner.nextLine();
                 OperationMenu enumByUser = OperationMenu.enumByUser(number);
-                if(enumByUser == null){
+                if (enumByUser == null) {
                     System.out.println("Operation not found");
                     printDialog();
                     continue;
                 }
-                switch (enumByUser){
-                    case SNOW_INFORMATION_ALL_OBJECTS -> showInformationAllObject(listAstronomicalObjects,listBlackHoles);
-                    case SHOW_OBJECT_AT_A_DISTANCE -> showObjectByDistance(listAstronomicalObjects,listBlackHoles);
+                switch (enumByUser) {
+                    case SNOW_INFORMATION_ALL_OBJECTS -> showInformationAllObject(listAstronomicalObjects, listBlackHoles);
+                    case SHOW_OBJECT_AT_A_DISTANCE -> showObjectByDistance(listAstronomicalObjects, listBlackHoles);
                     case ADD_NEW_ASTRONOMICAL_OBJECT -> writeNewAstronomicalObjectToFile(listAstronomicalObjects);
-                    case CHANGE_ASTRONOMICAL_OBJECT_INFORMATION -> writeChangeAstronomicalObject(listAstronomicalObjects,listChangesAstronomicalObjects);
+                    case CHANGE_ASTRONOMICAL_OBJECT_INFORMATION -> writeChangeAstronomicalObject(listAstronomicalObjects, listChangesAstronomicalObjects);
                     case DELETE_ASTRONOMICAL_OBJECT -> deleteAstronomicalObject(listAstronomicalObjects);
                     case GET_STATISTICS_POSITION_ASTRONOMICAL_OBJECTS -> getStatisticsAstronomicalObjects();
                     case ADD_NEW_BLACK_HOLE -> writeNewBlackHole(listBlackHoles);
-                    case CHANGE_BLACK_HOLE_INFORMATION -> writeChangeBlackHoles(listBlackHoles,listChangeBlackHoles);
+                    case CHANGE_BLACK_HOLE_INFORMATION -> writeChangeBlackHoles(listBlackHoles, listChangeBlackHoles);
                     case GET_STATISTICS_POSITION_BLACK_HOLES -> getStatisticsBlackHoles();
                     case EXIT -> {
+                        methodEntry = false;
                         System.out.println("Completion!");
-                        break outer;
                     }
                     default -> System.out.println("Value not supported!");
                 }
-                printDialog();
+                if (methodEntry)
+                    printDialog();
             }
         }
     }

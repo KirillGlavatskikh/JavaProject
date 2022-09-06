@@ -11,21 +11,21 @@ public class BlackHoles implements Serializable {
     private static final long serialVersionUID = -9033590604033361029L;
 
     private String name;
-    private long distanceToEarth;
-    private boolean isALive;
+    private Long distanceToEarth;
+    private Boolean isALive;
     private String changeType;
     private Date date;
-    private boolean aBoolean;
+    private Boolean flagForToString;
 
-    public BlackHoles(String name, long distanceToEarth, boolean isALive) {
-        aBoolean = true;
+    public BlackHoles(String name, Long distanceToEarth, Boolean isALive) {
+        flagForToString = true;
         this.name = name;
         this.distanceToEarth = distanceToEarth;
         this.isALive = isALive;
     }
 
-    public BlackHoles(String name, Date date, String changeType, long distanceToEarth, boolean isALive) {
-        aBoolean = false;
+    public BlackHoles(String name, Date date, String changeType, Long distanceToEarth, Boolean isALive) {
+        flagForToString = false;
         this.name = name;
         this.date = date;
         this.changeType = changeType;
@@ -58,7 +58,7 @@ public class BlackHoles implements Serializable {
         this.name = name;
     }
 
-    public long getDistanceToEarth() {
+    public Long getDistanceToEarth() {
         return distanceToEarth;
     }
 
@@ -66,7 +66,7 @@ public class BlackHoles implements Serializable {
         this.distanceToEarth = distanceToEarth;
     }
 
-    public boolean isALive() {
+    public Boolean isALive() {
         return isALive;
     }
 
@@ -79,18 +79,18 @@ public class BlackHoles implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BlackHoles that = (BlackHoles) o;
-        return distanceToEarth == that.distanceToEarth && isALive == that.isALive && aBoolean == that.aBoolean && Objects.equals(name, that.name) && Objects.equals(changeType, that.changeType) && Objects.equals(date, that.date);
+        return distanceToEarth == that.distanceToEarth && isALive == that.isALive && flagForToString == that.flagForToString && Objects.equals(name, that.name) && Objects.equals(changeType, that.changeType) && Objects.equals(date, that.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, distanceToEarth, isALive, changeType, date, aBoolean);
+        return Objects.hash(name, distanceToEarth, isALive, changeType, date, flagForToString);
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("BlackHoles{");
-        if (aBoolean) {
+        if (flagForToString) {
             sb.append("name='").append(name).append('\'');
             sb.append(", distanceToEarth=").append(distanceToEarth);
             sb.append(", isALive=").append(isALive);

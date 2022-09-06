@@ -13,17 +13,17 @@ public enum OperationMenu {
     GET_STATISTICS_POSITION_BLACK_HOLES("9", "Get statistic position black holes"),
     EXIT("10", "Exit");
 
-    private String number;
-    private String desc;
+    private final String number;
+    private final String desc;
 
     OperationMenu(String number, String desc) {
         this.number = number;
         this.desc = desc;
     }
 
-    public static OperationMenu enumByUser (String number){
-        for(OperationMenu value : values()){
-            if (value.number.equals(number)){
+    public static OperationMenu enumByUser(String number) {
+        for (OperationMenu value : values()) {
+            if (value.number.equals(number)) {
                 return value;
             }
         }
@@ -34,16 +34,8 @@ public enum OperationMenu {
         return number;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
     public String getDesc() {
         return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
     }
 
     @Override

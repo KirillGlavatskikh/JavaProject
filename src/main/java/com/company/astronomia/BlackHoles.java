@@ -2,22 +2,53 @@ package com.company.astronomia;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 public class BlackHoles implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = 5527723242946021122L;
+    private static final long serialVersionUID = -9033590604033361029L;
 
     private String name;
-    private long distanceToEarth;
-    private boolean isALive;
+    private Long distanceToEarth;
+    private Boolean isALive;
+    private String changeType;
+    private Date date;
+    private Boolean flagForToString;
 
-    public BlackHoles(String name, long distanceToEarth, boolean isALive) {
+    public BlackHoles(String name, Long distanceToEarth, Boolean isALive) {
+        flagForToString = true;
         this.name = name;
         this.distanceToEarth = distanceToEarth;
         this.isALive = isALive;
     }
+
+    public BlackHoles(String name, Date date, String changeType, Long distanceToEarth, Boolean isALive) {
+        flagForToString = false;
+        this.name = name;
+        this.date = date;
+        this.changeType = changeType;
+        this.distanceToEarth = distanceToEarth;
+        this.isALive = isALive;
+    }
+
+    public String getChangeType() {
+        return changeType;
+    }
+
+    public void setChangeType(String changeType) {
+        this.changeType = changeType;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
 
     public String getName() {
         return name;
@@ -27,7 +58,7 @@ public class BlackHoles implements Serializable {
         this.name = name;
     }
 
-    public long getDistanceToEarth() {
+    public Long getDistanceToEarth() {
         return distanceToEarth;
     }
 
@@ -35,7 +66,7 @@ public class BlackHoles implements Serializable {
         this.distanceToEarth = distanceToEarth;
     }
 
-    public boolean isALive() {
+    public Boolean isALive() {
         return isALive;
     }
 
@@ -48,21 +79,30 @@ public class BlackHoles implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BlackHoles that = (BlackHoles) o;
-        return distanceToEarth == that.distanceToEarth && isALive == that.isALive && Objects.equals(name, that.name);
+        return distanceToEarth == that.distanceToEarth && isALive == that.isALive && flagForToString == that.flagForToString && Objects.equals(name, that.name) && Objects.equals(changeType, that.changeType) && Objects.equals(date, that.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, distanceToEarth, isALive);
+        return Objects.hash(name, distanceToEarth, isALive, changeType, date, flagForToString);
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("BlackHoles{");
-        sb.append("name='").append(name).append('\'');
-        sb.append(", distanceToEarth=").append(distanceToEarth);
-        sb.append(", isALive=").append(isALive);
-        sb.append('}');
+        if (flagForToString) {
+            sb.append("name='").append(name).append('\'');
+            sb.append(", distanceToEarth=").append(distanceToEarth);
+            sb.append(", isALive=").append(isALive);
+            sb.append('}');
+        } else {
+            sb.append("name='").append(name).append('\'');
+            sb.append(", date='").append(date);
+            sb.append(", change type='").append(changeType);
+            sb.append(", distance to Earth='").append(distanceToEarth);
+            sb.append(", is a live='").append(isALive);
+            sb.append('}');
+        }
         return sb.toString();
     }
 }
